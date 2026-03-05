@@ -54,10 +54,11 @@
 
 
         <aside
-            :class="sidebarOpen ? 'w-[280px]' : 'w-0 overflow-hidden'"
+            :class="sidebarOpen ? 'w-[280px]' : 'w-0 overflow-hidden border-r-0'"
             class="hidden border-r border-slate-200 bg-white transition-all duration-300 md:flex md:h-screen md:sticky md:top-0 md:flex-col"
         >
-            <div class="w-[280px]">
+            <div class="relative flex h-full w-[280px] flex-col pb-16">
+
                 <div class="bg-lime-400 px-4 py-5 text-center">
                     <p class="text-3xl font-extrabold text-white">FACTURA TOUCH</p>
                     <p class="text-3xl font-bold text-black">Menú de Navegación</p>
@@ -72,17 +73,33 @@
                 <div class="mt-auto p-4">
                     <button class="w-full rounded bg-rose-900 py-3 text-lg font-bold text-white">SALIR</button>
                 </div>
-            </div>
-        </aside>
 
-        <main class="w-full min-h-screen flex-1 p-4 md:p-6">
-            <div class="mb-4 hidden items-center md:flex">
-                <button @click="sidebarOpen = !sidebarOpen" class="rounded p-2 hover:bg-slate-200" aria-label="Alternar sidebar">
+
+                <button
+                    @click="sidebarOpen = !sidebarOpen"
+                    class="absolute bottom-3 right-3 rounded p-2 text-slate-700 hover:bg-slate-200"
+                    aria-label="Colapsar sidebar"
+                >
+
                     <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                 </button>
             </div>
+
+        </aside>
+
+        <main class="w-full min-h-screen flex-1 p-4 md:p-6">
+            <button
+                x-show="!sidebarOpen"
+                @click="sidebarOpen = true"
+                class="mb-3 hidden rounded p-2 hover:bg-slate-200 md:inline-flex"
+                aria-label="Expandir sidebar"
+            >
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
 
 
             <div class="mx-auto max-w-md md:mx-0 md:max-w-none">
