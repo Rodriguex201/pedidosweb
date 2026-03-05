@@ -50,17 +50,29 @@
                                     @endif
                                 </td>
                                 <td class="px-4 py-3 text-slate-600">{{ $user->created_at->format('d/m/Y H:i') }}</td>
-                                <td class="px-4 py-3 text-right">
+                                <td class="px-4 py-3">
                                     @if (! $user->aprobado)
-                                        <form method="POST" action="{{ route('admin.usuarios.approve', $user) }}" class="inline-flex">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit" class="rounded-lg bg-emerald-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-200">
-                                                Aprobar usuario
-                                            </button>
-                                        </form>
+                                        <div class="flex justify-end gap-2">
+                                            <form method="POST" action="{{ route('admin.usuarios.approve', $user) }}" class="inline-flex">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" class="rounded-lg bg-emerald-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-200">
+                                                    Aprobar usuario
+                                                </button>
+                                            </form>
+
+                                            <form method="POST" action="{{ route('admin.usuarios.reject', $user) }}" class="inline-flex" onsubmit="return confirm('¿Seguro que quieres rechazar este usuario?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="rounded-lg bg-rose-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-rose-700 focus:outline-none focus:ring-4 focus:ring-rose-200">
+                                                    Rechazar usuario
+                                                </button>
+                                            </form>
+                                        </div>
                                     @else
-                                        <span class="text-xs font-medium text-slate-400">Sin acciones</span>
+                                        <div class="text-right">
+                                            <span class="text-xs font-medium text-slate-400">Sin acciones</span>
+                                        </div>
                                     @endif
                                 </td>
                             </tr>

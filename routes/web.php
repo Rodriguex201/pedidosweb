@@ -24,6 +24,7 @@ Route::post('/login', function (Request $request) {
 
 Route::get('/usuarios', [UserController::class, 'index'])->name('admin.usuarios');
 Route::patch('/usuarios/{user}/aprobar', [UserController::class, 'approve'])->name('admin.usuarios.approve');
+Route::delete('/usuarios/{user}/rechazar', [UserController::class, 'reject'])->name('admin.usuarios.reject');
 
 Route::view('/cliente', 'cliente.index')->name('cliente.index');
 Route::view('/pedido', 'pedido.index')->name('pedido.index');

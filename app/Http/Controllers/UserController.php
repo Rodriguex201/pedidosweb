@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\View\View;
 
 class UserController extends Controller
 {
@@ -48,5 +48,12 @@ class UserController extends Controller
         $user->update(['aprobado' => true]);
 
         return redirect()->route('admin.usuarios')->with('status', 'Usuario aprobado correctamente.');
+    }
+
+    public function reject(User $user): RedirectResponse
+    {
+        $user->delete();
+
+        return redirect()->route('admin.usuarios')->with('status', 'Usuario rechazado y eliminado correctamente.');
     }
 }
