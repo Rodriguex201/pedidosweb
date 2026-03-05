@@ -2,8 +2,9 @@
 
 @section('content')
 
-<div x-data="{ activeTab: 'cliente' }" class="relative min-h-screen pb-20 md:pb-8">
-    <header class="flex items-center justify-between bg-emerald-600 px-4 py-3 text-white md:px-8 md:py-4">
+<div x-data="{ activeTab: 'cliente' }" class="relative min-h-screen pb-20 md:pb-0">
+    <header class="flex items-center justify-between rounded-t-xl bg-emerald-600 px-4 py-3 text-white md:rounded-none md:px-6 md:py-4">
+
         <div class="flex items-center gap-3">
             <button @click="sidebarOpen = true" class="rounded-md p-2 hover:bg-emerald-700 md:hidden" aria-label="Abrir menú">
                 <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -15,15 +16,19 @@
         <button class="rounded-full bg-emerald-500 px-5 py-2 text-sm font-bold md:rounded-lg">CONTINUAR</button>
     </header>
 
-    <section class="space-y-4 p-4 md:mx-auto md:max-w-5xl md:space-y-0 md:p-8">
-        <div class="grid gap-6 md:grid-cols-2">
-            <article class="rounded-2xl bg-slate-100 md:rounded-2xl md:border md:border-slate-200 md:bg-white md:p-5 md:shadow-sm">
+
+    <section class="w-full max-w-md space-y-4 bg-slate-100 p-4 mx-auto md:max-w-none md:mx-0 md:space-y-0 md:p-6">
+        <div class="w-full md:grid md:grid-cols-2 md:gap-6">
+            <article class="rounded-2xl bg-slate-100 md:h-full md:rounded-2xl md:border md:border-slate-200 md:bg-white md:p-5 md:shadow-sm">
+
                 <h1 class="mb-4 text-3xl font-semibold md:text-2xl">Cliente</h1>
 
                 <div class="space-y-3 text-base md:text-sm">
                     <div class="grid grid-cols-[auto_1fr_auto_auto_auto] items-center gap-2 md:grid-cols-[52px_1fr_40px_34px_110px]">
                         <label>NIT</label>
-                        <input type="text" value="900123456" class="h-10 rounded-full border border-slate-300 bg-white px-4 md:rounded-lg md:bg-white">
+
+                        <input type="text" value="900123456" class="h-10 rounded-full border border-slate-300 bg-white px-4 md:rounded-lg">
+
                         <button type="button" class="h-10 w-10 rounded-md border border-slate-300 bg-slate-200 text-lg">🔍</button>
                         <label>Tel:</label>
                         <input type="text" value="(601) 3210000" class="h-10 rounded-full border border-slate-300 bg-slate-200 px-3 md:rounded-lg md:bg-white">
@@ -61,7 +66,9 @@
                 </div>
             </article>
 
-            <article class="rounded-2xl bg-slate-100 md:rounded-2xl md:border md:border-slate-200 md:bg-white md:p-5 md:shadow-sm">
+
+            <article class="mt-5 rounded-2xl bg-slate-100 md:mt-0 md:h-full md:rounded-2xl md:border md:border-slate-200 md:bg-white md:p-5 md:shadow-sm">
+
                 <h2 class="mb-4 text-3xl font-semibold md:text-2xl">Despacho</h2>
                 <div class="space-y-2 text-base md:text-sm">
                     <label class="block">Recibe:</label>
