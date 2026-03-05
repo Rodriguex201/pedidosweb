@@ -7,6 +7,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
+
 <body x-data="{ sidebarOpen: false }" class="min-h-screen w-full bg-slate-100 text-slate-900">
     <div class="min-h-screen w-full md:grid md:grid-cols-[280px_1fr]">
         <div
@@ -67,5 +68,6 @@
             </div>
         </main>
     </div>
+
 </body>
 </html>
