@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
+use Throwable;
 
 class UserController extends Controller
 {
@@ -16,19 +17,26 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'confirmed', 'min:8'],
-            'codigo_empresa' => ['required', 'string', 'max:50'],
+            'empresa_id' => ['required', 'integer', 'min:1'],
         ]);
 
-        User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'codigo_empresa' => strtoupper($validated['codigo_empresa']),
-            'aprobado' => false,
-            'rol' => 'empresa',
-        ]);
+        try {
+            User::create([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'email_verified_at' => null,
+                'password' => Hash::make($validated['password']),
+                'empresa_id' => $validated['empresa_id'],
+                'aprobado' => false,
+                'rol' => 'empresa',
+            ]);
+        } catch (Throwable) {
+            return back()
+                ->withInput()
+                ->with('error', 'No se pudo completar el registro. Inténtalo nuevamente.');
+        }
 
-        return redirect()->route('register.pending');
+        return redirect()->route('register')->with('status', '¡Registro completado! Tu usuario se guardó correctamente.');
     }
 
     public function pendingApproval(): View
