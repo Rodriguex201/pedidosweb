@@ -7,6 +7,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
+
 <body x-data="{ sidebarOpen: false }" class="min-h-screen bg-slate-200 text-slate-900">
     <div class="mx-auto min-h-screen w-full max-w-md bg-slate-100 shadow-xl md:max-w-6xl md:bg-transparent md:shadow-none">
         <div class="min-h-screen md:grid md:grid-cols-[260px_1fr] md:gap-0">
@@ -50,5 +51,6 @@
             </main>
         </div>
     </div>
+
 </body>
 </html>

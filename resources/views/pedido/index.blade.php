@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
 <div x-data="{ activeTab: 'pedido' }" class="relative min-h-screen pb-20 md:pb-8">
     <header class="flex items-center justify-between bg-emerald-600 px-4 py-3 text-white md:px-8 md:py-4">
         <div class="flex items-center gap-3">
@@ -22,6 +23,7 @@
     </section>
 
     <nav class="fixed bottom-0 left-0 right-0 z-30 flex border-t border-emerald-700 bg-emerald-600 text-base text-white md:hidden">
+
         <a href="{{ route('cliente.index') }}" @click="activeTab = 'cliente'" :class="activeTab === 'cliente' ? 'bg-emerald-700' : ''" class="flex-1 py-3 text-center">Cliente</a>
         <a href="{{ route('pedido.index') }}" @click="activeTab = 'pedido'" :class="activeTab === 'pedido' ? 'bg-emerald-700' : ''" class="flex-1 py-3 text-center">Pedido</a>
     </nav>
