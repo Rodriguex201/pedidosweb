@@ -41,7 +41,7 @@
                                 <td class="px-4 py-3 font-medium text-slate-900">{{ $user->id }}</td>
                                 <td class="px-4 py-3 text-slate-700">{{ $user->name }}</td>
                                 <td class="px-4 py-3 text-slate-700">{{ $user->email }}</td>
-                                <td class="px-4 py-3 font-semibold uppercase text-slate-700">{{ $user->codigo_empresa }}</td>
+                                <td class="px-4 py-3 font-semibold uppercase text-slate-700">{{ $user->empresa?->codigo ?? 'N/D' }}</td>
                                 <td class="px-4 py-3">
                                     @if ($user->aprobado)
                                         <span class="inline-flex rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">Aprobado</span>

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Empresa;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
+use Throwable;
 
 class UserController extends Controller
 {
@@ -19,16 +21,33 @@ class UserController extends Controller
             'codigo_empresa' => ['required', 'string', 'max:50'],
         ]);
 
-        User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'codigo_empresa' => strtoupper($validated['codigo_empresa']),
-            'aprobado' => false,
-            'rol' => 'empresa',
-        ]);
+        $empresa = Empresa::query()
+            ->where('codigo', strtoupper($validated['codigo_empresa']))
+            ->first();
 
-        return redirect()->route('register.pending');
+        if (! $empresa) {
+            return back()
+                ->withInput()
+                ->withErrors(['codigo_empresa' => 'El código de empresa es inválido.']);
+        }
+
+        try {
+            User::create([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'email_verified_at' => null,
+                'password' => Hash::make($validated['password']),
+                'empresa_id' => $empresa->id,
+                'aprobado' => false,
+                'rol' => 'empresa',
+            ]);
+        } catch (Throwable) {
+            return back()
+                ->withInput()
+                ->with('error', 'No se pudo completar el registro. Inténtalo nuevamente.');
+        }
+
+        return redirect()->route('register')->with('status', '¡Registro completado! Tu usuario se guardó correctamente y está pendiente de aprobación.');
     }
 
     public function pendingApproval(): View
@@ -38,7 +57,7 @@ class UserController extends Controller
 
     public function index(): View
     {
-        $users = User::query()->latest()->get();
+        $users = User::query()->with('empresa')->latest()->get();
 
         return view('admin.usuarios', compact('users'));
     }
