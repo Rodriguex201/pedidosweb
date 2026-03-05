@@ -26,6 +26,18 @@
                 </div>
             @endif
 
+            @if (session('status'))
+                <div class="mb-6 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                    {{ session('status') }}
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="mb-6 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+                    {{ session('error') }}
+                </div>
+            @endif
+
             <form method="POST" action="{{ route('register.submit') }}" class="space-y-5" novalidate>
                 @csrf
                 <div>
@@ -69,11 +81,11 @@
                 </div>
 
                 <div>
-                    <label for="codigo_empresa" class="mb-1.5 block text-sm font-medium text-slate-700">Código de empresa</label>
-                    <input id="codigo_empresa" name="codigo_empresa" type="text" autocomplete="organization" value="{{ old('codigo_empresa') }}" required
-                        class="block w-full rounded-xl border px-4 py-2.5 text-sm uppercase shadow-sm outline-none transition placeholder:text-slate-400 focus:ring-4 {{ $errors->has('codigo_empresa') ? 'border-rose-400 bg-rose-50/50 focus:border-rose-500 focus:ring-rose-100' : 'border-slate-300 bg-white focus:border-emerald-500 focus:ring-emerald-100' }}"
-                        placeholder="EMP-001">
-                    @error('codigo_empresa')
+                    <label for="empresa_id" class="mb-1.5 block text-sm font-medium text-slate-700">ID de empresa</label>
+                    <input id="empresa_id" name="empresa_id" type="number" min="1" value="{{ old('empresa_id') }}" required
+                        class="block w-full rounded-xl border px-4 py-2.5 text-sm shadow-sm outline-none transition placeholder:text-slate-400 focus:ring-4 {{ $errors->has('empresa_id') ? 'border-rose-400 bg-rose-50/50 focus:border-rose-500 focus:ring-rose-100' : 'border-slate-300 bg-white focus:border-emerald-500 focus:ring-emerald-100' }}"
+                        placeholder="1">
+                    @error('empresa_id')
                         <p class="mt-1.5 text-xs font-medium text-rose-600">{{ $message }}</p>
                     @enderror
                 </div>

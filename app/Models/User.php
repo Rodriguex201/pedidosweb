@@ -21,7 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'codigo_empresa',
+        'empresa_id',
         'aprobado',
         'rol',
     ];
@@ -46,6 +46,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'empresa_id' => 'integer',
             'aprobado' => 'boolean',
         ];
     }

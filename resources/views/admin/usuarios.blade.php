@@ -29,7 +29,7 @@
                             <th class="px-4 py-3">ID</th>
                             <th class="px-4 py-3">Nombre</th>
                             <th class="px-4 py-3">Correo</th>
-                            <th class="px-4 py-3">Código de empresa</th>
+                            <th class="px-4 py-3">ID de empresa</th>
                             <th class="px-4 py-3">Estado de aprobación</th>
                             <th class="px-4 py-3">Fecha de registro</th>
                             <th class="px-4 py-3 text-right">Acciones</th>
@@ -41,7 +41,7 @@
                                 <td class="px-4 py-3 font-medium text-slate-900">{{ $user->id }}</td>
                                 <td class="px-4 py-3 text-slate-700">{{ $user->name }}</td>
                                 <td class="px-4 py-3 text-slate-700">{{ $user->email }}</td>
-                                <td class="px-4 py-3 font-semibold uppercase text-slate-700">{{ $user->codigo_empresa }}</td>
+                                <td class="px-4 py-3 font-semibold uppercase text-slate-700">{{ $user->empresa_id }}</td>
                                 <td class="px-4 py-3">
                                     @if ($user->aprobado)
                                         <span class="inline-flex rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">Aprobado</span>

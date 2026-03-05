@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('codigo_empresa', 50)->after('password');
-            $table->boolean('aprobado')->default(false)->after('codigo_empresa');
+            $table->unsignedBigInteger('empresa_id')->after('password');
+            $table->boolean('aprobado')->default(false)->after('empresa_id');
             $table->string('rol')->default('empresa')->after('aprobado');
         });
     }
@@ -24,7 +24,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['codigo_empresa', 'aprobado', 'rol']);
+            $table->dropColumn(['empresa_id', 'aprobado', 'rol']);
         });
     }
 };
