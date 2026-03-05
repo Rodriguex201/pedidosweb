@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Empresa;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -20,13 +21,23 @@ class UserController extends Controller
             'empresa_id' => ['required', 'integer', 'min:1'],
         ]);
 
+        $empresa = Empresa::query()
+            ->where('codigo', strtoupper($validated['codigo_empresa']))
+            ->first();
+
+        if (! $empresa) {
+            return back()
+                ->withInput()
+                ->withErrors(['codigo_empresa' => 'El código de empresa es inválido.']);
+        }
+
         try {
             User::create([
                 'name' => $validated['name'],
                 'email' => $validated['email'],
                 'email_verified_at' => null,
                 'password' => Hash::make($validated['password']),
-                'empresa_id' => $validated['empresa_id'],
+                'empresa_id' => $empresa->id,
                 'aprobado' => false,
                 'rol' => 'empresa',
             ]);
@@ -36,7 +47,7 @@ class UserController extends Controller
                 ->with('error', 'No se pudo completar el registro. Inténtalo nuevamente.');
         }
 
-        return redirect()->route('register')->with('status', '¡Registro completado! Tu usuario se guardó correctamente.');
+        return redirect()->route('register')->with('status', '¡Registro completado! Tu usuario se guardó correctamente y está pendiente de aprobación.');
     }
 
     public function pendingApproval(): View
@@ -46,7 +57,7 @@ class UserController extends Controller
 
     public function index(): View
     {
-        $users = User::query()->latest()->get();
+        $users = User::query()->with('empresa')->latest()->get();
 
         return view('admin.usuarios', compact('users'));
     }
