@@ -7,12 +7,14 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
+
 <body
     x-data="{ sidebarOpen: true }"
     x-init="if (window.innerWidth < 768) { sidebarOpen = false }"
     class="min-h-screen w-full bg-slate-100 text-slate-900"
 >
     <div class="min-h-screen w-full md:flex">
+
         <div
             x-show="sidebarOpen"
             x-transition.opacity
@@ -22,7 +24,9 @@
 
         <aside
             :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
+
             class="fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] flex-col bg-white transition-transform duration-300 md:hidden"
+
         >
             <div class="bg-lime-400 px-4 py-5 text-center">
                 <p class="text-3xl font-extrabold text-white">FACTURA TOUCH</p>
@@ -47,6 +51,7 @@
                 <button class="w-full rounded bg-rose-900 py-3 text-lg font-bold text-white">SALIR</button>
             </div>
         </aside>
+
 
         <aside
             :class="sidebarOpen ? 'w-[280px]' : 'w-0 overflow-hidden'"
@@ -79,10 +84,12 @@
                 </button>
             </div>
 
+
             <div class="mx-auto max-w-md md:mx-0 md:max-w-none">
                 @yield('content')
             </div>
         </main>
     </div>
+
 </body>
 </html>
