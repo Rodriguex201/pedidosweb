@@ -29,7 +29,7 @@
                             <th class="px-4 py-3">ID</th>
                             <th class="px-4 py-3">Nombre</th>
                             <th class="px-4 py-3">Correo</th>
-                            <th class="px-4 py-3">Código de empresa</th>
+                            <th class="px-4 py-3">ID de empresa</th>
                             <th class="px-4 py-3">Estado de aprobación</th>
                             <th class="px-4 py-3">Fecha de registro</th>
                             <th class="px-4 py-3 text-right">Acciones</th>
