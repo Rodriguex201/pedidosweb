@@ -69,11 +69,11 @@
                 </div>
 
                 <div>
-                    <label for="company_code" class="mb-1.5 block text-sm font-medium text-slate-700">Código de empresa</label>
-                    <input id="company_code" name="company_code" type="text" autocomplete="organization" value="{{ old('company_code') }}" required
-                        class="block w-full rounded-xl border px-4 py-2.5 text-sm uppercase shadow-sm outline-none transition placeholder:text-slate-400 focus:ring-4 {{ $errors->has('company_code') ? 'border-rose-400 bg-rose-50/50 focus:border-rose-500 focus:ring-rose-100' : 'border-slate-300 bg-white focus:border-emerald-500 focus:ring-emerald-100' }}"
-                        placeholder="A001 - B001">
-                    @error('company_code')
+                    <label for="codigo_empresa" class="mb-1.5 block text-sm font-medium text-slate-700">Código de empresa</label>
+                    <input id="codigo_empresa" name="codigo_empresa" type="text" autocomplete="organization" value="{{ old('codigo_empresa') }}" required
+                        class="block w-full rounded-xl border px-4 py-2.5 text-sm uppercase shadow-sm outline-none transition placeholder:text-slate-400 focus:ring-4 {{ $errors->has('codigo_empresa') ? 'border-rose-400 bg-rose-50/50 focus:border-rose-500 focus:ring-rose-100' : 'border-slate-300 bg-white focus:border-emerald-500 focus:ring-emerald-100' }}"
+                        placeholder="EMP-001">
+                    @error('codigo_empresa')
                         <p class="mt-1.5 text-xs font-medium text-rose-600">{{ $message }}</p>
                     @enderror
                 </div>
