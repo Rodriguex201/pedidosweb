@@ -13,7 +13,7 @@
             </button>
             <p class="text-xs font-semibold uppercase tracking-wide md:text-sm">Cliente</p>
         </div>
-        <button class="rounded-full bg-emerald-500 px-5 py-2 text-sm font-bold md:rounded-lg">CONTINUAR</button>
+        <a href="{{ route('pedido.index') }}" class="rounded-full bg-emerald-500 px-5 py-2 text-sm font-bold md:rounded-lg">CONTINUAR</a>
     </header>
 
 
