@@ -22,20 +22,18 @@ class UserController extends Controller
         ]);
 
         $codigoEmpresa = trim($validated['codigo_empresa']);
+        $codigoEmpresaNormalizado = strtoupper($codigoEmpresa);
 
         $empresa = Empresa::query()
             ->whereRaw('TRIM(LOWER(codigo)) = ?', [strtolower($codigoEmpresa)])
             ->first();
 
         if (! $empresa) {
-            $empresa = Empresa::query()->where('activa', true)->first()
-                ?? Empresa::query()->first();
-        }
-
-        if (! $empresa) {
-            return back()
-                ->withInput()
-                ->withErrors(['codigo_empresa' => 'No hay empresas disponibles para asociar este registro.']);
+            $empresa = Empresa::query()->create([
+                'nombre' => 'Empresa '.$codigoEmpresaNormalizado,
+                'codigo' => $codigoEmpresaNormalizado,
+                'activa' => false,
+            ]);
         }
 
         try {
