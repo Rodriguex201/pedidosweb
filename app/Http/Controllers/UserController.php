@@ -18,17 +18,22 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'confirmed', 'min:8'],
-            'empresa_id' => ['required', 'integer', 'min:1'],
+            'codigo_empresa' => ['required', 'string', 'max:255'],
         ]);
 
+        $codigoEmpresa = trim($validated['codigo_empresa']);
+        $codigoEmpresaNormalizado = strtoupper($codigoEmpresa);
+
         $empresa = Empresa::query()
-            ->where('codigo', strtoupper($validated['codigo_empresa']))
+            ->whereRaw('TRIM(LOWER(codigo)) = ?', [strtolower($codigoEmpresa)])
             ->first();
 
         if (! $empresa) {
-            return back()
-                ->withInput()
-                ->withErrors(['codigo_empresa' => 'El código de empresa es inválido.']);
+            $empresa = Empresa::query()->create([
+                'nombre' => 'Empresa '.$codigoEmpresaNormalizado,
+                'codigo' => $codigoEmpresaNormalizado,
+                'activa' => false,
+            ]);
         }
 
         try {
@@ -41,10 +46,12 @@ class UserController extends Controller
                 'aprobado' => false,
                 'rol' => 'empresa',
             ]);
-        } catch (Throwable) {
+        } catch (Throwable $exception) {
+            report($exception);
+
             return back()
                 ->withInput()
-                ->with('error', 'No se pudo completar el registro. Inténtalo nuevamente.');
+                ->withErrors(['registro' => 'Error al registrar: '.$exception->getMessage()]);
         }
 
         return redirect()->route('register')->with('status', '¡Registro completado! Tu usuario se guardó correctamente y está pendiente de aprobación.');
