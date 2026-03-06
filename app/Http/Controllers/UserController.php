@@ -18,7 +18,7 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'confirmed', 'min:8'],
-            'empresa_id' => ['required', 'integer', 'min:1'],
+            'codigo_empresa' => ['required', 'string', 'max:255'],
         ]);
 
         $empresa = Empresa::query()
