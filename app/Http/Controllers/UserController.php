@@ -21,8 +21,10 @@ class UserController extends Controller
             'codigo_empresa' => ['required', 'string', 'max:255'],
         ]);
 
+        $codigoEmpresa = trim($validated['codigo_empresa']);
+
         $empresa = Empresa::query()
-            ->where('codigo', strtoupper($validated['codigo_empresa']))
+            ->whereRaw('LOWER(codigo) = ?', [strtolower($codigoEmpresa)])
             ->first();
 
         if (! $empresa) {
