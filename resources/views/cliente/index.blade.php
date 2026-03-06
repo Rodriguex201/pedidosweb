@@ -2,7 +2,7 @@
 
 @section('content')
 <div
-    x-data="clienteView('{{ route('cliente.buscar') }}', '{{ csrf_token() }}')"
+    x-data="clienteView('{{ route('cliente.buscar') }}', '{{ csrf_token() }}', @js($errors->first('continuar')))"
     class="relative min-h-screen pb-20 md:pb-0"
 >
     <header class="flex items-center justify-between rounded-t-xl bg-emerald-600 px-4 py-3 text-white md:rounded-none md:px-6 md:py-4">
@@ -15,9 +15,12 @@
             <p class="text-xs font-semibold uppercase tracking-wide md:text-sm">Cliente</p>
         </div>
 
-        <a href="{{ route('pedido.index') }}" class="rounded-full bg-emerald-500 px-5 py-2 text-sm font-bold md:rounded-lg">
-            CONTINUAR
-        </a>
+        <form method="POST" action="{{ route('cliente.continuar') }}">
+            @csrf
+            <button type="submit" class="rounded-full bg-emerald-500 px-5 py-2 text-sm font-bold md:rounded-lg">
+                CONTINUAR
+            </button>
+        </form>
     </header>
 
     <section class="mx-auto w-full max-w-md bg-slate-100 p-4 md:mx-0 md:max-w-none md:p-6">
@@ -146,10 +149,10 @@
 </div>
 
 <script>
-    function clienteView(urlBuscar, csrfToken) {
+    function clienteView(urlBuscar, csrfToken, errorContinuar = '') {
         return {
             cargando: false,
-            mensajeError: '',
+            mensajeError: errorContinuar ?? '',
             form: {
                 nit: '',
                 nombre: '',

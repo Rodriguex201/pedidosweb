@@ -77,27 +77,31 @@ class ClienteController extends Controller
             ], 404);
         }
 
+        $clienteData = [
+            'nit' => $cliente->tronit,
+            'nombre' => $cliente->tronombre,
+            'zona' => $cliente->trozona,
+            'ciudad' => $cliente->trociudad,
+            'telefono' => $cliente->trotelef,
+            'correo' => $cliente->troemail,
+            'direccion' => $cliente->trodirec,
+            'cupo' => (int) ($cliente->trocccupo ?? 0),
+            'tipo_cliente' => $cliente->trotipo,
+            'escala' => $this->obtenerPrecioCliente($cliente),
+            'celular' => $cliente->trocelular,
+            'nombre2' => $cliente->tronomb_2,
+            'apellido1' => $cliente->troapel_1,
+            'apellido2' => $cliente->troapel_2,
+            'saldo_vencido' => (int) ($cliente->trocpsaldo ?? 0),
+            'precio' => (int) ($cliente->troprecio ?? 0),
+            'facturas_por_cobrar' => (int) ($cliente->troccvnc ?? 0),
+            'saldo_cartera' => (int) ($cliente->troccsaldo ?? 0),
+        ];
+
+        $request->session()->put('cliente_seleccionado', $clienteData);
+
         return response()->json([
-            'data' => [
-                'nit' => $cliente->tronit,
-                'nombre' => $cliente->tronombre,
-                'zona' => $cliente->trozona,
-                'ciudad' => $cliente->trociudad,
-                'telefono' => $cliente->trotelef,
-                'correo' => $cliente->troemail,
-                'direccion' => $cliente->trodirec,
-                'cupo' => (int) ($cliente->trocccupo ?? 0),
-                'tipo_cliente' => $cliente->trotipo,
-                'escala' => $this->obtenerPrecioCliente($cliente),
-                'celular' => $cliente->trocelular,
-                'nombre2' => $cliente->tronomb_2,
-                'apellido1' => $cliente->troapel_1,
-                'apellido2' => $cliente->troapel_2,
-                'saldo_vencido' => (int) ($cliente->trocpsaldo ?? 0),
-                'precio' => (int) ($cliente->troprecio ?? 0),
-                'facturas_por_cobrar' => (int) ($cliente->troccvnc ?? 0),
-                'saldo_cartera' => (int) ($cliente->troccsaldo ?? 0),
-            ],
+            'data' => $clienteData,
         ]);
     }
 

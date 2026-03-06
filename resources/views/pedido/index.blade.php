@@ -11,110 +11,69 @@
             </button>
             <p class="text-xs font-semibold uppercase tracking-wide md:text-sm">Pedido</p>
         </div>
-        <span class="rounded-full bg-emerald-500 px-5 py-2 text-sm font-bold md:rounded-lg">GESTIÓN</span>
+        <span class="rounded-full bg-emerald-500 px-5 py-2 text-sm font-bold md:rounded-lg">#{{ $pedidoId }}</span>
     </header>
 
     <section class="mx-auto w-full max-w-md space-y-4 bg-slate-100 p-4 md:mx-0 md:max-w-none md:space-y-5 md:p-6">
         <article class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:p-5">
             <h1 class="text-2xl font-bold text-slate-900 md:text-3xl">Gestión de Pedido</h1>
             <div class="mt-3 grid gap-2 text-sm text-slate-700 md:grid-cols-2 md:gap-4 md:text-base">
-                <p><span class="font-semibold">CC/Nit:</span> 900123456-7</p>
-                <p><span class="font-semibold">Cliente:</span> Comercial Ejemplo SAS</p>
+                <p><span class="font-semibold">CC/Nit:</span> {{ $cliente['nit'] ?? 'N/A' }}</p>
+                <p><span class="font-semibold">Cliente:</span> {{ $cliente['nombre'] ?? 'N/A' }}</p>
+                <p><span class="font-semibold">Ciudad:</span> {{ $cliente['ciudad'] ?? 'N/A' }}</p>
+                <p><span class="font-semibold">Teléfono:</span> {{ $cliente['telefono'] ?? 'N/A' }}</p>
             </div>
 
-            <div class="mt-4 grid grid-cols-2 gap-2 md:grid-cols-4">
-                <button type="button" class="rounded-lg bg-violet-600 px-3 py-2 text-sm font-semibold text-white">Cod.Barras</button>
-                <button type="button" class="rounded-lg bg-slate-500 px-3 py-2 text-sm font-semibold text-white">Reiniciar</button>
-                <button type="button" class="rounded-lg bg-amber-400 px-3 py-2 text-sm font-semibold text-slate-900">Actualizar</button>
-                <button type="button" class="rounded-lg bg-cyan-600 px-3 py-2 text-sm font-semibold text-white">Terminar</button>
-            </div>
+            <p class="mt-4 text-sm text-slate-600">Seleccione productos, agregue cantidades y construya el detalle del pedido desde el catálogo cargado.</p>
+        </article>
 
-            <div class="mt-4 grid grid-cols-3 gap-2 md:gap-3">
-                <div class="rounded-xl border border-emerald-100 bg-emerald-50 px-3 py-2">
-                    <p class="text-xs uppercase text-slate-500">Total $</p>
-                    <p class="text-lg font-bold text-emerald-700">0</p>
-                </div>
-                <div class="rounded-xl border border-blue-100 bg-blue-50 px-3 py-2">
-                    <p class="text-xs uppercase text-slate-500">Cantidad</p>
-                    <p class="text-lg font-bold text-blue-700">0</p>
-                </div>
-                <div class="rounded-xl border border-violet-100 bg-violet-50 px-3 py-2">
-                    <p class="text-xs uppercase text-slate-500">kg</p>
-                    <p class="text-lg font-bold text-violet-700">0</p>
-                </div>
+        <article class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:p-5">
+            <h2 class="mb-3 text-lg font-semibold text-slate-800">Grupos de productos</h2>
+            <div class="flex flex-wrap gap-2">
+                @forelse ($grupos as $grupo)
+                    <span class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">{{ data_get($grupo, 'grupnomb', data_get($grupo, 'grupcodigo', 'Grupo')) }}</span>
+                @empty
+                    <p class="text-sm text-slate-500">No hay grupos disponibles.</p>
+                @endforelse
             </div>
         </article>
 
         <article class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:p-5">
-            <div class="grid gap-3 md:grid-cols-12">
-                <div class="md:col-span-5">
-                    <label class="mb-1 block text-sm font-medium text-slate-700">Código Artículo</label>
-                    <div class="flex gap-2">
-                        <input type="text" value="" placeholder="Ej. ART-001" class="h-11 w-full rounded-lg border border-slate-300 px-3 text-sm outline-none focus:border-emerald-500 md:h-10" />
-                        <button type="button" class="h-11 w-11 rounded-lg border border-slate-300 bg-slate-100 text-lg md:h-10 md:w-10">🔍</button>
-                    </div>
-                </div>
-
-                <div class="md:col-span-3">
-                    <label class="mb-1 block text-sm font-medium text-slate-700">Cantidad</label>
-                    <div class="flex items-center gap-2">
-                        <button type="button" class="h-11 w-10 rounded-lg border border-slate-300 bg-slate-100 text-lg md:h-10">-</button>
-                        <input type="text" value="0" class="h-11 w-full rounded-lg border border-slate-300 px-3 text-center text-sm outline-none focus:border-emerald-500 md:h-10" />
-                        <button type="button" class="h-11 w-10 rounded-lg border border-slate-300 bg-slate-100 text-lg md:h-10">+</button>
-                    </div>
-                </div>
-
-                <div class="md:col-span-4">
-                    <label class="mb-1 block text-sm font-medium text-slate-700">Valor Unidad</label>
-                    <input type="text" value="0" class="h-11 w-full rounded-lg border border-slate-300 px-3 text-sm outline-none focus:border-emerald-500 md:h-10" />
-                </div>
-
-                <div class="md:col-span-8">
-                    <label class="mb-1 block text-sm font-medium text-slate-700">Detalle Movimiento (Opcional)</label>
-                    <input type="text" value="" placeholder="Detalle adicional del artículo" class="h-11 w-full rounded-lg border border-slate-300 px-3 text-sm outline-none focus:border-emerald-500 md:h-10" />
-                </div>
-
-                <div class="md:col-span-4">
-                    <label class="mb-1 block text-sm font-medium text-slate-700">Valor Parcial</label>
-                    <input type="text" value="0" class="h-11 w-full rounded-lg border border-slate-300 bg-slate-50 px-3 text-sm font-semibold outline-none md:h-10" />
-                </div>
-
-                <div class="md:col-span-8">
-                    <label class="mb-1 block text-sm font-medium text-slate-700">Descripción Artículo</label>
-                    <input type="text" value="" class="h-11 w-full rounded-lg border border-slate-300 px-3 text-sm outline-none focus:border-emerald-500 md:h-10" />
-                </div>
-
-                <div class="md:col-span-4">
-                    <label class="mb-1 block text-sm font-medium text-slate-700">Marca</label>
-                    <input type="text" value="" class="h-11 w-full rounded-lg border border-slate-300 px-3 text-sm outline-none focus:border-emerald-500 md:h-10" />
-                </div>
-
-                <div class="grid grid-cols-3 gap-2 md:col-span-6">
-                    <div>
-                        <label class="mb-1 block text-sm font-medium text-slate-700">Peso</label>
-                        <input type="text" value="0" class="h-11 w-full rounded-lg border border-slate-300 px-3 text-sm md:h-10" />
-                    </div>
-                    <div class="col-span-2">
-                        <label class="mb-1 block text-sm font-medium text-slate-700">Código Alter</label>
-                        <input type="text" value="" class="h-11 w-full rounded-lg border border-slate-300 px-3 text-sm md:h-10" />
-                    </div>
-                </div>
-
-                <div class="md:col-span-3">
-                    <label class="mb-1 block text-sm font-medium text-slate-700">Stock</label>
-                    <input type="text" value="0" class="h-11 w-full rounded-lg border border-slate-300 bg-slate-50 px-3 text-sm font-semibold md:h-10" />
-                </div>
+            <h2 class="mb-3 text-lg font-semibold text-slate-800">Artículos del catálogo</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full text-sm">
+                    <thead>
+                        <tr class="border-b bg-slate-100 text-left text-xs uppercase tracking-wide text-slate-600">
+                            <th class="px-3 py-2">Código</th>
+                            <th class="px-3 py-2">Grupo</th>
+                            <th class="px-3 py-2">Artículo</th>
+                            <th class="px-3 py-2 text-right">Precio</th>
+                            <th class="px-3 py-2 text-right">IVA</th>
+                            <th class="px-3 py-2 text-right">Stock</th>
+                            <th class="px-3 py-2 text-right">Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($articulos as $articulo)
+                            <tr class="border-b last:border-0">
+                                <td class="px-3 py-2">{{ data_get($articulo, 'articodigo') }}</td>
+                                <td class="px-3 py-2">{{ data_get($articulo, 'artigrupo') }}</td>
+                                <td class="px-3 py-2">{{ data_get($articulo, 'artinomb') }}</td>
+                                <td class="px-3 py-2 text-right">{{ number_format((float) data_get($articulo, 'artivlr1_c', 0), 0, ',', '.') }}</td>
+                                <td class="px-3 py-2 text-right">{{ data_get($articulo, 'artiiva', 0) }}</td>
+                                <td class="px-3 py-2 text-right">{{ data_get($articulo, 'articant', 0) }}</td>
+                                <td class="px-3 py-2 text-right">
+                                    <input type="number" min="0" value="0" class="h-9 w-20 rounded-lg border border-slate-300 px-2 text-right" />
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="7" class="px-3 py-4 text-center text-slate-500">No hay artículos disponibles para este pedido.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
-        </article>
-
-        <article class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:p-5">
-            <div class="grid grid-cols-4 rounded-t-lg bg-slate-200 text-xs font-semibold uppercase tracking-wide text-slate-700 md:text-sm">
-                <div class="border-r border-slate-300 px-2 py-2">Artículo</div>
-                <div class="border-r border-slate-300 px-2 py-2 text-center">Cantidad</div>
-                <div class="border-r border-slate-300 px-2 py-2 text-center">Val.Unidad</div>
-                <div class="px-2 py-2 text-center">Parcial</div>
-            </div>
-            <div class="h-40 rounded-b-lg border border-t-0 border-slate-300 bg-slate-100 md:h-48"></div>
         </article>
     </section>
 
