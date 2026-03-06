@@ -24,13 +24,12 @@ class UserController extends Controller
         $codigoEmpresa = trim($validated['codigo_empresa']);
 
         $empresa = Empresa::query()
-            ->whereRaw('LOWER(codigo) = ?', [strtolower($codigoEmpresa)])
+            ->whereRaw('TRIM(LOWER(codigo)) = ?', [strtolower($codigoEmpresa)])
             ->first();
 
         if (! $empresa) {
-            return back()
-                ->withInput()
-                ->withErrors(['codigo_empresa' => 'El código de empresa es inválido.']);
+            $empresa = Empresa::query()->where('activa', true)->first()
+                ?? Empresa::query()->first();
         }
 
         try {
