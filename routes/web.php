@@ -11,6 +11,7 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 
 Route::get('/operario-login', [AuthController::class, 'showOperarioLogin'])->name('operario.login');
 Route::post('/operario-login', [AuthController::class, 'validateOperario'])->name('operario.login.submit');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::view('/register', 'auth.register')->name('register');
 Route::get('/registro-pendiente', [UserController::class, 'pendingApproval'])->name('register.pending');
