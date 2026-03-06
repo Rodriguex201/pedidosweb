@@ -81,11 +81,25 @@ class UserController extends Controller
         return view('admin.usuarios', compact('users'));
     }
 
-    public function approve(User $user): RedirectResponse
+    public function approve(Request $request, User $user): RedirectResponse
     {
+        $validated = $request->validate([
+            'ip_servidor' => ['required', 'ip'],
+        ]);
+
+        if (! $user->empresa) {
+            return redirect()->route('admin.usuarios')->withErrors([
+                'aprobacion' => 'No se encontró la empresa asociada al usuario.',
+            ]);
+        }
+
+        $user->empresa->update([
+            'ip_servidor' => $validated['ip_servidor'],
+        ]);
+
         $user->update(['aprobado' => true]);
 
-        return redirect()->route('admin.usuarios')->with('status', 'Usuario aprobado correctamente.');
+        return redirect()->route('admin.usuarios')->with('status', 'Usuario aprobado correctamente e IP de empresa registrada.');
     }
 
     public function reject(User $user): RedirectResponse
