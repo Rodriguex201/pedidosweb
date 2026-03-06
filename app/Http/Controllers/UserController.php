@@ -32,6 +32,12 @@ class UserController extends Controller
                 ?? Empresa::query()->first();
         }
 
+        if (! $empresa) {
+            return back()
+                ->withInput()
+                ->withErrors(['codigo_empresa' => 'No hay empresas disponibles para asociar este registro.']);
+        }
+
         try {
             User::create([
                 'name' => $validated['name'],
@@ -42,10 +48,12 @@ class UserController extends Controller
                 'aprobado' => false,
                 'rol' => 'empresa',
             ]);
-        } catch (Throwable) {
+        } catch (Throwable $exception) {
+            report($exception);
+
             return back()
                 ->withInput()
-                ->with('error', 'No se pudo completar el registro. Inténtalo nuevamente.');
+                ->withErrors(['registro' => 'Error al registrar: '.$exception->getMessage()]);
         }
 
         return redirect()->route('register')->with('status', '¡Registro completado! Tu usuario se guardó correctamente y está pendiente de aprobación.');
