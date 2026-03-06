@@ -31,6 +31,10 @@
                             <th class="px-4 py-3">Correo</th>
                             <th class="px-4 py-3">ID de empresa</th>
                             <th class="px-4 py-3">Estado de aprobación</th>
+                            <th class="px-4 py-3">Dispositivo</th>
+                            <th class="px-4 py-3">IP registro</th>
+                            <th class="px-4 py-3">User Agent</th>
+                            <th class="px-4 py-3">Último acceso</th>
                             <th class="px-4 py-3">Fecha de registro</th>
                             <th class="px-4 py-3 text-right">Acciones</th>
                         </tr>
@@ -49,6 +53,12 @@
                                         <span class="inline-flex rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">Pendiente de aprobación</span>
                                     @endif
                                 </td>
+                                <td class="px-4 py-3 text-slate-700">{{ $user->device_name ?? 'N/D' }}</td>
+                                <td class="px-4 py-3 text-slate-700">{{ $user->ip_registro ?? 'N/D' }}</td>
+                                <td class="px-4 py-3 text-slate-600" title="{{ $user->user_agent ?? 'N/D' }}">
+                                    <span class="block max-w-xs break-all">{{ $user->user_agent ?? 'N/D' }}</span>
+                                </td>
+                                <td class="px-4 py-3 text-slate-600">{{ $user->ultimo_acceso?->format('d/m/Y H:i') ?? 'N/D' }}</td>
                                 <td class="px-4 py-3 text-slate-600">{{ $user->created_at->format('d/m/Y H:i') }}</td>
                                 <td class="px-4 py-3">
                                     @if (! $user->aprobado)
@@ -78,7 +88,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="px-4 py-8 text-center text-sm text-slate-500">No hay usuarios registrados todavía.</td>
+                                <td colspan="11" class="px-4 py-8 text-center text-sm text-slate-500">No hay usuarios registrados todavía.</td>
                             </tr>
                         @endforelse
                     </tbody>
