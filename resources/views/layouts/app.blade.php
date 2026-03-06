@@ -9,8 +9,7 @@
 </head>
 
 <body
-    x-data="{ sidebarOpen: true }"
-    x-init="if (window.innerWidth < 768) { sidebarOpen = false }"
+    x-data="{ sidebarOpen: false }"
     class="min-h-screen w-full bg-slate-100 text-slate-900"
 >
     <div class="min-h-screen w-full md:flex">
@@ -92,8 +91,8 @@
         <main class="w-full min-h-screen flex-1 p-4 md:p-6">
             <button
                 x-show="!sidebarOpen"
-                @click="sidebarOpen = true"
-                class="mb-3 hidden rounded p-2 hover:bg-slate-200 md:inline-flex"
+                @click="sidebarOpen = !sidebarOpen"
+                class="mb-3 inline-flex rounded p-2 hover:bg-slate-200"
                 aria-label="Expandir sidebar"
             >
                 <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
