@@ -21,6 +21,17 @@
             </div>
         @endif
 
+
+        @if ($errors->any())
+            <div class="mb-6 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+                <ul class="list-inside list-disc space-y-1">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-slate-200 text-sm">
@@ -31,6 +42,10 @@
                             <th class="px-4 py-3">Correo</th>
                             <th class="px-4 py-3">ID de empresa</th>
                             <th class="px-4 py-3">Estado de aprobación</th>
+                            <th class="px-4 py-3">Dispositivo</th>
+                            <th class="px-4 py-3">IP registro</th>
+                            <th class="px-4 py-3">User Agent</th>
+                            <th class="px-4 py-3">Último acceso</th>
                             <th class="px-4 py-3">Fecha de registro</th>
                             <th class="px-4 py-3 text-right">Acciones</th>
                         </tr>
@@ -49,15 +64,29 @@
                                         <span class="inline-flex rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">Pendiente de aprobación</span>
                                     @endif
                                 </td>
+                                <td class="px-4 py-3 text-slate-700">{{ $user->device_name ?? 'N/D' }}</td>
+                                <td class="px-4 py-3 text-slate-700">{{ $user->ip_registro ?? 'N/D' }}</td>
+                                <td class="px-4 py-3 text-slate-600" title="{{ $user->user_agent ?? 'N/D' }}">
+                                    <span class="block max-w-xs break-all">{{ $user->user_agent ?? 'N/D' }}</span>
+                                </td>
+                                <td class="px-4 py-3 text-slate-600">{{ $user->ultimo_acceso?->format('d/m/Y H:i') ?? 'N/D' }}</td>
                                 <td class="px-4 py-3 text-slate-600">{{ $user->created_at->format('d/m/Y H:i') }}</td>
                                 <td class="px-4 py-3">
                                     @if (! $user->aprobado)
                                         <div class="flex justify-end gap-2">
-                                            <form method="POST" action="{{ route('admin.usuarios.approve', $user) }}" class="inline-flex">
+                                            <form method="POST" action="{{ route('admin.usuarios.approve', $user) }}" class="flex items-center gap-2">
                                                 @csrf
                                                 @method('PATCH')
+                                                <input
+                                                    type="text"
+                                                    name="ip_servidor"
+                                                    value="{{ old('ip_servidor', $user->empresa?->ip_servidor) }}"
+                                                    placeholder="IP del servidor"
+                                                    required
+                                                    class="w-36 rounded-lg border border-slate-300 px-2 py-2 text-xs text-slate-700 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+                                                >
                                                 <button type="submit" class="rounded-lg bg-emerald-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-200">
-                                                    Aprobar usuario
+                                                    Guardar IP y aprobar
                                                 </button>
                                             </form>
 
@@ -78,7 +107,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="px-4 py-8 text-center text-sm text-slate-500">No hay usuarios registrados todavía.</td>
+                                <td colspan="11" class="px-4 py-8 text-center text-sm text-slate-500">No hay usuarios registrados todavía.</td>
                             </tr>
                         @endforelse
                     </tbody>

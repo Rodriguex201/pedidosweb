@@ -25,6 +25,11 @@ class User extends Authenticatable
         'empresa_id',
         'aprobado',
         'rol',
+        'device_hash',
+        'device_name',
+        'ip_registro',
+        'user_agent',
+        'ultimo_acceso',
     ];
 
     /**
@@ -49,6 +54,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'empresa_id' => 'integer',
             'aprobado' => 'boolean',
+            'ultimo_acceso' => 'datetime',
         ];
     }
 
