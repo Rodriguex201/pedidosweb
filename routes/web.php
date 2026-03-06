@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,7 @@ Route::patch('/usuarios/{user}/aprobar', [UserController::class, 'approve'])->na
 Route::delete('/usuarios/{user}/rechazar', [UserController::class, 'reject'])->name('admin.usuarios.reject');
 
 Route::middleware('operario.auth')->group(function (): void {
-    Route::view('/cliente', 'cliente.index')->name('cliente.index');
+    Route::get('/cliente', [ClienteController::class, 'index'])->name('cliente.index');
+    Route::post('/cliente/buscar', [ClienteController::class, 'buscar'])->name('cliente.buscar');
     Route::view('/pedido', 'pedido.index')->name('pedido.index');
 });
