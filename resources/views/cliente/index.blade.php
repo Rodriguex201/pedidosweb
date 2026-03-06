@@ -117,7 +117,7 @@
 
                     <div class="space-y-2">
                         <label class="block font-medium">Dirección:</label>
-                        <input type="text" class="h-11 w-full rounded-xl border border-slate-300 bg-slate-100 px-4 outline-none md:bg-white">
+                        <input x-model="form.direccion" type="text" class="h-11 w-full rounded-xl border border-slate-300 bg-slate-100 px-4 outline-none md:bg-white">
                     </div>
 
                     <div class="space-y-2">
@@ -154,6 +154,7 @@
                 nit: '',
                 nombre: '',
                 ciudad: '',
+                direccion: '',
                 telefono: '',
                 correo: '',
                 cupo: 0,
@@ -195,6 +196,7 @@
                         nit: data.nit ?? this.form.nit,
                         nombre: data.nombre ?? '',
                         ciudad: data.ciudad ?? '',
+                        direccion: data.direccion ?? '',
                         telefono: data.telefono ?? '',
                         correo: data.correo ?? '',
                         cupo: Number(data.cupo ?? 0),

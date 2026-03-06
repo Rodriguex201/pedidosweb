@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+use stdClass;
 use Throwable;
 
 class ClienteController extends Controller
@@ -48,6 +49,7 @@ class ClienteController extends Controller
                     'trociudad',
                     'trotelef',
                     'troemail',
+                    'trodirec',
                     'trocccupo',
                     'trotipo',
                     'trocelular',
@@ -83,8 +85,10 @@ class ClienteController extends Controller
                 'ciudad' => $cliente->trociudad,
                 'telefono' => $cliente->trotelef,
                 'correo' => $cliente->troemail,
+                'direccion' => $cliente->trodirec,
                 'cupo' => (int) ($cliente->trocccupo ?? 0),
-                'escala' => $cliente->trotipo,
+                'tipo_cliente' => $cliente->trotipo,
+                'escala' => $this->obtenerPrecioCliente($cliente),
                 'celular' => $cliente->trocelular,
                 'nombre2' => $cliente->tronomb_2,
                 'apellido1' => $cliente->troapel_1,
@@ -95,5 +99,16 @@ class ClienteController extends Controller
                 'saldo_cartera' => (int) ($cliente->troccsaldo ?? 0),
             ],
         ]);
+    }
+
+    private function obtenerPrecioCliente(stdClass $cliente): string
+    {
+        return match ((int) ($cliente->troprecio ?? 0)) {
+            1 => 'contado',
+            2 => 'mayorista',
+            3 => 'distribuidor',
+            4 => 'credito',
+            default => 'no especificado',
+        };
     }
 }
