@@ -12,9 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('empresa_id')->after('password')->constrained()->cascadeOnDelete();
-            $table->boolean('aprobado')->default(false)->after('empresa_id');
-            $table->string('rol')->default('empresa')->after('aprobado');
+
+            $table->string('device_hash')->nullable()->after('rol');
+            $table->string('device_name')->nullable();
+            $table->string('ip_registro')->nullable();
+            $table->text('user_agent')->nullable();
+            $table->timestamp('ultimo_acceso')->nullable();
+
         });
     }
 
@@ -24,8 +28,15 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['empresa_id']);
-            $table->dropColumn(['empresa_id', 'aprobado', 'rol']);
+
+            $table->dropColumn([
+                'device_hash',
+                'device_name',
+                'ip_registro',
+                'user_agent',
+                'ultimo_acceso'
+            ]);
+
         });
     }
 };
