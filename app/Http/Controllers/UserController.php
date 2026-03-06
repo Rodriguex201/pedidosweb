@@ -18,17 +18,18 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'confirmed', 'min:8'],
-            'empresa_id' => ['required', 'integer', 'min:1'],
+            'codigo_empresa' => ['required', 'string', 'max:255'],
         ]);
 
+        $codigoEmpresa = trim($validated['codigo_empresa']);
+
         $empresa = Empresa::query()
-            ->where('codigo', strtoupper($validated['codigo_empresa']))
+            ->whereRaw('TRIM(LOWER(codigo)) = ?', [strtolower($codigoEmpresa)])
             ->first();
 
         if (! $empresa) {
-            return back()
-                ->withInput()
-                ->withErrors(['codigo_empresa' => 'El código de empresa es inválido.']);
+            $empresa = Empresa::query()->where('activa', true)->first()
+                ?? Empresa::query()->first();
         }
 
         try {
