@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
+use Jenssegers\Agent\Agent;
 use Throwable;
 
 class UserController extends Controller
@@ -37,6 +38,12 @@ class UserController extends Controller
         }
 
         try {
+            $agent = new Agent();
+            $deviceName = $agent->platform().' - '.$agent->browser();
+            $ip = $request->ip();
+            $userAgent = $request->userAgent() ?? '';
+            $deviceHash = hash('sha256', $ip.$userAgent);
+
             User::create([
                 'name' => $validated['name'],
                 'email' => $validated['email'],
@@ -45,6 +52,11 @@ class UserController extends Controller
                 'empresa_id' => $empresa->id,
                 'aprobado' => false,
                 'rol' => 'empresa',
+                'device_hash' => $deviceHash,
+                'device_name' => $deviceName,
+                'ip_registro' => $ip,
+                'user_agent' => $userAgent,
+                'ultimo_acceso' => now(),
             ]);
         } catch (Throwable $exception) {
             report($exception);
