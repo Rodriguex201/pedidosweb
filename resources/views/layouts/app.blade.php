@@ -12,6 +12,12 @@
     x-data="{ sidebarOpen: false }"
     class="min-h-screen w-full bg-slate-100 text-slate-900"
 >
+    @php
+        $headerData = $sessionHeaderData ?? [];
+        $userName = $headerData['userName'] ?? null;
+        $operarioName = $headerData['operarioName'] ?? null;
+        $empresaInfo = $headerData['empresaInfo'] ?? null;
+    @endphp
     <div class="min-h-screen w-full md:flex">
 
         <div
@@ -47,7 +53,10 @@
             </nav>
 
             <div class="mt-auto p-4">
-                <button class="w-full rounded bg-rose-900 py-3 text-lg font-bold text-white">SALIR</button>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="w-full rounded bg-rose-900 py-3 text-lg font-bold text-white">SALIR</button>
+                </form>
             </div>
         </aside>
 
@@ -81,7 +90,10 @@
                 </nav>
 
                 <div class="mt-auto p-4">
-                    <button class="w-full rounded bg-rose-900 py-3 text-lg font-bold text-white">SALIR</button>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="w-full rounded bg-rose-900 py-3 text-lg font-bold text-white">SALIR</button>
+                    </form>
                 </div>
 
             </div>
@@ -102,6 +114,25 @@
 
 
             <div class="mx-auto max-w-md md:mx-0 md:max-w-none">
+                @if ($userName || $operarioName || $empresaInfo)
+                    <div class="mb-3 text-right text-xs text-slate-600">
+                        @if ($empresaInfo)
+                            <p>{{ $empresaInfo }}</p>
+                        @endif
+
+                        <p>
+                            @if ($userName)
+                                Usuario: {{ $userName }}
+                            @endif
+
+                            @if ($operarioName)
+                                @if ($userName) · @endif
+                                Operario: {{ $operarioName }}
+                            @endif
+                        </p>
+                    </div>
+                @endif
+
                 @yield('content')
             </div>
         </main>
