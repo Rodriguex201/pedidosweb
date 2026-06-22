@@ -9,134 +9,169 @@
 </head>
 
 <body
-    x-data="{ sidebarOpen: false }"
-    class="min-h-screen w-full bg-slate-100 text-slate-900"
+    x-data="{ sidebarOpen: window.innerWidth >= 1024, alertOpen: {{ session('status') || session('error') || $errors->any() ? 'true' : 'false' }} }"
+    x-init="window.addEventListener('resize', () => { if (window.innerWidth >= 1024) sidebarOpen = true })"
+    class="min-h-screen bg-slate-50 text-slate-900 antialiased"
 >
     @php
         $headerData = $sessionHeaderData ?? [];
         $userName = $headerData['userName'] ?? null;
         $operarioName = $headerData['operarioName'] ?? null;
         $empresaInfo = $headerData['empresaInfo'] ?? null;
+        $navItems = [
+            ['label' => 'Realizar pedidos', 'route' => 'cliente.index', 'active' => ['cliente.*', 'pedido.index']],
+            ['label' => 'Pedidos en proceso', 'route' => 'pedido.proceso', 'active' => ['pedido.proceso', 'pedido.detalle']],
+            ['label' => 'Pedidos aprobados', 'route' => 'pedido.aprobados', 'active' => ['pedido.aprobados']],
+            ['label' => 'Histórico', 'route' => 'pedido.historico', 'active' => ['pedido.historico']],
+        ];
     @endphp
-    <div class="min-h-screen w-full md:flex">
 
+    <div class="min-h-screen lg:flex">
         <div
             x-show="sidebarOpen"
             x-transition.opacity
-            class="fixed inset-0 z-40 bg-black/50 md:hidden"
+            class="fixed inset-0 z-40 bg-slate-950/45 backdrop-blur-sm lg:hidden"
             @click="sidebarOpen = false"
         ></div>
 
         <aside
-            :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
-
-            class="fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] flex-col bg-white transition-transform duration-300 md:hidden"
-
+            :class="sidebarOpen ? 'translate-x-0 lg:w-72' : '-translate-x-full lg:w-0 lg:translate-x-0 lg:overflow-hidden lg:border-r-0'"
+            class="fixed inset-y-0 left-0 z-50 flex w-72 max-w-[88vw] flex-col border-r border-slate-200 bg-white shadow-2xl shadow-slate-950/10 transition-all duration-300 lg:sticky lg:top-0 lg:h-screen lg:shadow-none"
         >
-            <div class="bg-lime-400 px-4 py-5 text-center">
-                <p class="text-3xl font-extrabold text-white">FACTURA TOUCH</p>
-                <p class="text-3xl font-bold text-black">Menú de Navegación</p>
-            </div>
+            <div class="flex h-full w-72 flex-col">
+                <div class="border-b border-slate-200 px-5 py-5">
+                    <div class="flex items-start justify-between gap-3">
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-600">PedidosWeb</p>
+                            <h1 class="mt-1 text-xl font-semibold text-slate-950">Factura Touch</h1>
+                        </div>
+                        <button
+                            @click="sidebarOpen = false"
+                            class="inline-flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+                            aria-label="Cerrar menú"
+                        >
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6 6 18" />
+                            </svg>
+                        </button>
+                    </div>
 
-            <button
-                @click="sidebarOpen = false"
-                class="self-end p-3 text-slate-500"
-                aria-label="Cerrar menú"
-            >
-                ✕
-            </button>
-
-            <nav class="text-2xl">
-                <a href="{{ route('cliente.index') }}" class="block border-y border-slate-200 px-6 py-4">Realizar Pedidos</a>
-                <a href="#" class="block border-b border-slate-200 px-6 py-4">Pedidos En Proceso</a>
-                <a href="#" class="block border-b border-slate-200 px-6 py-4">Pedidos Aprobados</a>
-            </nav>
-
-            <div class="mt-auto p-4">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="w-full rounded bg-rose-900 py-3 text-lg font-bold text-white">SALIR</button>
-                </form>
-            </div>
-        </aside>
-
-
-        <aside
-            :class="sidebarOpen ? 'w-[280px]' : 'w-0 overflow-hidden border-r-0'"
-            class="hidden border-r border-slate-200 bg-white transition-all duration-300 md:flex md:h-screen md:sticky md:top-0 md:flex-col"
-        >
-
-            <div class="relative flex h-full w-[280px] flex-col">
-                <div class="relative bg-lime-400 px-4 py-5 text-center">
-                    <p class="text-3xl font-extrabold text-white">FACTURA TOUCH</p>
-                    <p class="text-3xl font-bold text-black">Menú de Navegación</p>
-
-                    <button
-                        @click="sidebarOpen = !sidebarOpen"
-                        class="absolute right-2 top-2 rounded p-2 text-slate-700 hover:bg-slate-200"
-                        aria-label="Colapsar sidebar"
-                    >
-                        <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    </button>
-
+                    @if ($empresaInfo || $userName || $operarioName)
+                        <div class="mt-5 rounded-xl border border-emerald-100 bg-emerald-50/70 px-3 py-3 text-xs text-slate-700">
+                            @if ($empresaInfo)
+                                <p class="font-semibold text-slate-900">{{ $empresaInfo }}</p>
+                            @endif
+                            @if ($userName)
+                                <p class="mt-1">Usuario: <span class="font-medium">{{ $userName }}</span></p>
+                            @endif
+                            @if ($operarioName)
+                                <p class="mt-1">Operario: <span class="font-medium">{{ $operarioName }}</span></p>
+                            @endif
+                        </div>
+                    @endif
                 </div>
 
-                <nav class="text-lg">
-                    <a href="{{ route('cliente.index') }}" class="block border-y border-slate-200 px-6 py-4">Realizar Pedidos</a>
-                    <a href="#" class="block border-b border-slate-200 px-6 py-4">Pedidos En Proceso</a>
-                    <a href="#" class="block border-b border-slate-200 px-6 py-4">Pedidos Aprobados</a>
+                <nav class="flex-1 space-y-1 px-3 py-4">
+                    @foreach ($navItems as $item)
+                        @php $isActive = collect($item['active'])->contains(fn ($pattern) => request()->routeIs($pattern)); @endphp
+                        <a
+                            href="{{ route($item['route']) }}"
+                            class="group flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition {{ $isActive ? 'bg-emerald-600 text-white shadow-md shadow-emerald-100' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-950' }}"
+                            @click="if (window.innerWidth < 1024) sidebarOpen = false"
+                        >
+                            <span class="flex h-8 w-8 items-center justify-center rounded-lg {{ $isActive ? 'bg-white/15' : 'bg-slate-100 text-slate-500 group-hover:bg-white' }}">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 12h16M4 17h10" />
+                                </svg>
+                            </span>
+                            {{ $item['label'] }}
+                        </a>
+                    @endforeach
                 </nav>
 
-                <div class="mt-auto p-4">
+                <div class="border-t border-slate-200 p-4">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="w-full rounded bg-rose-900 py-3 text-lg font-bold text-white">SALIR</button>
+                        <button type="submit" class="inline-flex w-full items-center justify-center rounded-xl border border-rose-200 bg-rose-50 px-4 py-2.5 text-sm font-semibold text-rose-700 transition hover:bg-rose-100 focus:outline-none focus:ring-4 focus:ring-rose-100">
+                            Salir
+                        </button>
                     </form>
                 </div>
-
             </div>
-
         </aside>
 
-        <main class="w-full min-h-screen flex-1 p-4 md:p-6">
-            <button
-                x-show="!sidebarOpen"
-                @click="sidebarOpen = !sidebarOpen"
-                class="mb-3 inline-flex rounded p-2 hover:bg-slate-200"
-                aria-label="Expandir sidebar"
-            >
-                <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-            </button>
-
-
-            <div class="mx-auto max-w-md md:mx-0 md:max-w-none">
-                @if ($userName || $operarioName || $empresaInfo)
-                    <div class="mb-3 text-right text-xs text-slate-600">
-                        @if ($empresaInfo)
-                            <p>{{ $empresaInfo }}</p>
-                        @endif
-
-                        <p>
-                            @if ($userName)
-                                Usuario: {{ $userName }}
-                            @endif
-
-                            @if ($operarioName)
-                                @if ($userName) · @endif
-                                Operario: {{ $operarioName }}
-                            @endif
-                        </p>
+        <main class="min-w-0 flex-1">
+            <header class="sticky top-0 z-30 border-b border-slate-200/80 bg-white/90 backdrop-blur">
+                <div class="flex min-h-16 items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+                    <div class="flex items-center gap-3">
+                        <button
+                            @click="sidebarOpen = !sidebarOpen"
+                            class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:bg-slate-50 hover:text-slate-950 focus:outline-none focus:ring-4 focus:ring-emerald-100"
+                            aria-label="Alternar menú"
+                        >
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.16em] text-emerald-600">Panel de pedidos</p>
+                            <p class="text-sm font-medium text-slate-600">Gestión comercial y operativa</p>
+                        </div>
                     </div>
-                @endif
+                </div>
+            </header>
 
+            <div class="mx-auto w-full max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
                 @yield('content')
             </div>
         </main>
     </div>
 
+    @if (session('status') || session('error') || $errors->any())
+        <div
+            x-show="alertOpen"
+            x-transition.opacity
+            class="fixed inset-0 z-[80] flex items-center justify-center bg-slate-950/45 px-4 py-6 backdrop-blur-sm"
+        >
+            <section class="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-5 text-left shadow-2xl shadow-slate-950/20">
+                <div class="flex items-start gap-4">
+                    <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl {{ session('status') ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700' }}">
+                        @if (session('status'))
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7" />
+                            </svg>
+                        @else
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.3 4.3 2.6 18a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 4.3a2 2 0 0 0-3.4 0Z" />
+                            </svg>
+                        @endif
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <h2 class="text-base font-semibold text-slate-950">{{ session('status') ? 'Operación exitosa' : 'Revisa esta información' }}</h2>
+                        <div class="mt-2 space-y-2 text-sm leading-6 text-slate-600">
+                            @if (session('status'))
+                                <p>{{ session('status') }}</p>
+                            @endif
+                            @if (session('error'))
+                                <p>{{ session('error') }}</p>
+                            @endif
+                            @foreach ($errors->all() as $error)
+                                <p>{{ $error }}</p>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-5 flex justify-end">
+                    <button
+                        type="button"
+                        class="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-emerald-100 transition hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-100"
+                        @click="alertOpen = false"
+                    >
+                        Entendido
+                    </button>
+                </div>
+            </section>
+        </div>
+    @endif
 </body>
 </html>

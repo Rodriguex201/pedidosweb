@@ -9,3 +9,83 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+@layer base {
+    [x-cloak] {
+        display: none !important;
+    }
+
+    button,
+    a,
+    input,
+    select,
+    textarea {
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+@layer components {
+    .app-card {
+        @apply rounded-2xl border border-slate-200 bg-white shadow-sm shadow-slate-200/60;
+    }
+
+    .app-panel {
+        @apply rounded-2xl border border-slate-200 bg-white p-4 shadow-sm shadow-slate-200/60 sm:p-5;
+    }
+
+    .app-input {
+        @apply h-11 w-full rounded-xl border border-slate-300 bg-white px-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500 disabled:opacity-70;
+    }
+
+    .app-textarea {
+        @apply w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500 disabled:opacity-70;
+    }
+
+    .app-label {
+        @apply text-sm font-medium text-slate-700;
+    }
+
+    .btn-primary {
+        @apply inline-flex items-center justify-center rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-emerald-100 transition hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-100 disabled:cursor-not-allowed disabled:opacity-60;
+    }
+
+    .btn-secondary {
+        @apply inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 hover:text-slate-950 focus:outline-none focus:ring-4 focus:ring-slate-100;
+    }
+
+    .btn-danger {
+        @apply inline-flex items-center justify-center rounded-xl border border-rose-200 bg-rose-50 px-4 py-2.5 text-sm font-semibold text-rose-700 transition hover:bg-rose-100 focus:outline-none focus:ring-4 focus:ring-rose-100;
+    }
+
+    .table-shell {
+        @apply overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm shadow-slate-200/60;
+    }
+
+    .data-table {
+        @apply min-w-full text-sm;
+    }
+
+    .data-table thead {
+        @apply bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500;
+    }
+
+    .data-table th {
+        @apply px-4 py-3;
+    }
+
+    .data-table td {
+        @apply px-4 py-3 text-slate-700;
+    }
+
+    .data-table tbody tr {
+        @apply border-t border-slate-100 transition hover:bg-emerald-50/40;
+    }
+
+    .soft-alert-error {
+        @apply rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700;
+    }
+
+    .soft-alert-success {
+        @apply rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700;
+    }
+}

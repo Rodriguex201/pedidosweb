@@ -14,23 +14,12 @@ class EmpresaExternaConnectionService
      */
     public function buildConfig(Empresa $empresa): array
     {
-        return [
-            'driver' => env('DB_CONNECTION_EXTERNA', 'mysql'),
+        $config = (array) config('database.connections.'.self::CONNECTION_NAME, []);
+
+        return array_merge($config, [
             'host' => $empresa->ip_servidor,
-            'port' => env('DB_PORT_EXTERNA', '3306'),
-            'database' => strtolower((string) $empresa->codigo),
-            'username' => env('DB_USERNAME_EXTERNA'),
-            'password' => env('DB_PASSWORD_EXTERNA'),
-            'charset' => env('DB_CHARSET', 'utf8mb4'),
-            'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
-            'prefix' => '',
-            'prefix_indexes' => true,
-            'strict' => true,
-            'engine' => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
-                (PHP_VERSION_ID >= 80500 ? \Pdo\Mysql::ATTR_SSL_CA : \PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA'),
-            ]) : [],
-        ];
+            'database' => $empresa->database ?: strtolower((string) $empresa->codigo),
+        ]);
     }
 
     /**

@@ -85,6 +85,13 @@
                                                     required
                                                     class="w-36 rounded-lg border border-slate-300 px-2 py-2 text-xs text-slate-700 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
                                                 >
+                                                <input
+                                                    type="text"
+                                                    name="database"
+                                                    value="{{ old('database', $user->empresa?->database) }}"
+                                                    placeholder="Base de datos"
+                                                    class="w-36 rounded-lg border border-slate-300 px-2 py-2 text-xs text-slate-700 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+                                                >
                                                 <button type="submit" class="rounded-lg bg-emerald-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-200">
                                                     Guardar IP y aprobar
                                                 </button>
