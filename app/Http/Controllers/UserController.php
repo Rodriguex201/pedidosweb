@@ -85,6 +85,7 @@ class UserController extends Controller
     {
         $validated = $request->validate([
             'ip_servidor' => ['required', 'ip'],
+            'database' => ['nullable', 'string', 'max:255', 'regex:/^[A-Za-z0-9_-]+$/'],
         ]);
 
         if (! $user->empresa) {
@@ -95,6 +96,8 @@ class UserController extends Controller
 
         $user->empresa->update([
             'ip_servidor' => $validated['ip_servidor'],
+            'database' => $validated['database'] ?: $user->empresa->database,
+            'activa' => true,
         ]);
 
         $user->update(['aprobado' => true]);

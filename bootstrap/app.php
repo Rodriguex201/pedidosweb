@@ -12,6 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
+            'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
             'operario.auth' => \App\Http\Middleware\EnsureOperarioIsAuthenticated::class,
         ]);
     })

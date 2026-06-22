@@ -39,10 +39,22 @@ class AuthController extends Controller
                 ->withErrors(['email' => 'Tu usuario aún no ha sido aprobado.']);
         }
 
-        if (! $user->empresa || ! $user->empresa->ip_servidor) {
+        if (! $user->empresa) {
             return back()
                 ->withInput(['email' => $validated['email']])
-                ->withErrors(['email' => 'No hay configuración de empresa para este usuario.']);
+                ->withErrors(['email' => 'No hay empresa configurada para este usuario.']);
+        }
+
+        if (! $user->empresa->activa) {
+            return back()
+                ->withInput(['email' => $validated['email']])
+                ->withErrors(['email' => 'La empresa para este usuario no está activa.']);
+        }
+
+        if (! $user->empresa->ip_servidor) {
+            return back()
+                ->withInput(['email' => $validated['email']])
+                ->withErrors(['email' => 'La empresa para este usuario no tiene IP de servidor configurada.']);
         }
 
         try {
@@ -105,9 +117,21 @@ class AuthController extends Controller
             ->with('empresa')
             ->find($request->session()->get('auth_flow.user_id'));
 
-        if (! $user || ! $user->empresa || ! $user->empresa->ip_servidor) {
+        if (! $user || ! $user->empresa) {
             return redirect()->route('login')->withErrors([
                 'email' => 'La sesión de autenticación expiró. Inicia sesión nuevamente.',
+            ]);
+        }
+
+        if (! $user->empresa->activa) {
+            return redirect()->route('login')->withErrors([
+                'email' => 'La empresa para este usuario no está activa.',
+            ]);
+        }
+
+        if (! $user->empresa->ip_servidor) {
+            return redirect()->route('login')->withErrors([
+                'email' => 'La empresa para este usuario no tiene IP de servidor configurada.',
             ]);
         }
 
@@ -116,7 +140,7 @@ class AuthController extends Controller
 
             $operario = DB::connection(EmpresaExternaConnectionService::CONNECTION_NAME)
                 ->table('xxxxciao')
-                ->select('nombre', 'pw')
+                ->select('nombre', 'pw', 'clave', 'obra', 'ciao_vend', 'terminal', 'sucursal')
                 ->where('nombre', $validated['operario'])
                 ->first();
         } catch (Throwable $throwable) {
@@ -140,11 +164,25 @@ class AuthController extends Controller
             'user_id' => $user->id,
             'empresa_id' => $user->empresa->id,
             'operario' => $operario->nombre,
-            'vendedor' => $validated['vendedor'] ?: null,
+            'operario_clave' => (string) ($operario->clave ?? ''),
+            'obra' => (string) ($operario->obra ?? ''),
+            'vendedor' => (string) (($operario->ciao_vend ?? '') ?: ($validated['vendedor'] ?? '')),
+            'terminal' => (string) ($operario->terminal ?? ''),
+            'sucursal' => (string) ($operario->sucursal ?? ''),
             'ip_servidor' => $user->empresa->ip_servidor,
             'database' => $config['database'],
         ]);
 
         return redirect()->route('cliente.index');
+    }
+
+    public function logout(Request $request): RedirectResponse
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login');
     }
 }

@@ -1,3 +1,9 @@
+## Pendientes multiempresa
+
+- Confirmar si el vendedor debe venir obligatoriamente de la base externa en `xxxxciao.ciao_vend`.
+- Por ahora el login de operario mantiene el comportamiento anterior: permite escribir manualmente el vendedor y, si se deja vacio, usa `ciao_vend` cuando exista.
+- Riesgo pendiente: si un usuario escribe un vendedor que no le corresponde, podria consultar pedidos asociados a ese vendedor dentro de la misma empresa. La mejora recomendada es validar el vendedor contra una relacion real operario-vendedor en la base externa antes de guardarlo en sesion.
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
